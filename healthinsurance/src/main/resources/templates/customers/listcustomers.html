@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Customers</title>
+    </head>
+    <body>
+        <div>Customers <a th:href="@{/customers/add}">New Customer</a></div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Full Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="customer : ${customers}">
+                    <td th:text="${customer.fullname}"></td>
+                    <td>
+                        <a th:href="@{/updatecustomer/{id}(id=${customer.id})}">Edit</a>
+                        <a th:href="@{/deletecustomer/{id}(id=${customer.id})}">Delete</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </body>
+</html>
