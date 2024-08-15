@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <title>My Website</title>
+    
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+
+    <!-- jQuery UI CSS -->
+    <link rel="stylesheet" th:href="@{/css/jquery-ui.min.css}">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <!-- jQuery -->
+    <script th:src="@{/js/jquery.js}"></script>
+</head>
+<body>
+    <header class="mb-5">
+        <h1 class="p-3">Health Insurance</h1>
+        <nav class="navbar navbar-expand-lg navbar-light headerbar print-button ps-3 pe-3" style="z-index: 1021;">
+            <a th:href="@{/app/home}">
+                <img alt="Site Logo home" th:src="@{/images/ui-icons_444444_256x240.png}" style="width:90px; height:32px;">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation" style="background-color: rgb(243, 245, 247);">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a href="/app/reports" class="nav-link m-link">Reports</a>
+                    </li>
+                    <div class="dropdown mr-3 nav-item">
+                        <a class="nav-link" id="usermenudropbtn" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Data Access<span class="fa fa-caret-down"></span></a>
+                        <nav class="dropdown-menu m-link" aria-labelby="usermenudropbtn" style="background-color: rgba(var(--bs-dark-rgb), var(--bs-bg-opacity)) !important;--bs-bg-opacity:1">
+                            
+                            <li class="nav-item">
+                                <a href="@{/}" class="nav-link m-link">ASYCUDA Data</a>
+                                <a href="@{/}" class="nav-link m-link">ITAS Data</a>
+                             </li>
+                        </nav>
+                    </div>
+                </ul>
+                
+            </div>
+            <ul class="navbar-nav">
+                <div class="dropdown mr-3 nav-item">
+                    <a class="nav-link" id="usermenudropbtn" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">User<span class="fa fa-caret-down"></span></a>
+                    <nav class="dropdown-menu m-link" aria-labelby="usermenudropbtn" style="background-color: rgba(var(--bs-dark-rgb), var(--bs-bg-opacity)) !important;--bs-bg-opacity:1">
+                        <li class="nav-item">
+                            <a th:href="@{/app/login}" title="Log Out" class="nav-link m-link">Sign Out</span></a>
+                        </li>
+                    </nav>
+                </div>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container" layout:fragment="content" style="min-height: calc(100vh - 200px);">
+        <!-- Content goes here -->
+    </main>
+
+    <footer class="bg-secondary p-3" style="z-index: 1021;">
+        <p class="text-light">© 2024 My Website</p>
+    </footer>
+
+    
+    <!-- Bootstrap JS -->
+    <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+
+    <!-- jQuery UI -->
+    <script th:src="@{/js/jquery-ui.min.js}"></script>
+
+    
+
+    <!-- Custom JS -->
+    <script th:src="@{/js/scripts.js}"></script>
+</body>
+</html>

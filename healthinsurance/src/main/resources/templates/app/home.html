@@ -1,1 +1,25 @@
-Home
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="layout.html">
+<head>
+    <title>Home</title>
+</head>
+<body>
+    <div layout:fragment="content">
+        <h2>Welcome to My Website</h2>
+        <p>This is the home page.</p>
+        <p>
+            <label for="datepicker">Select a date:</label>
+            <input type="text" id="datepicker">
+        </p>
+        <script>
+            $(function() {
+                $("#datepicker").datepicker({
+                    dateFormat: 'yy-mm-dd'
+                });
+            });
+        </script>
+    </div>
+</body>
+</html>

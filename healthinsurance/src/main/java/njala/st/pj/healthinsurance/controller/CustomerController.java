@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import njala.st.pj.healthinsurance.component.CustomerRepository;
 import njala.st.pj.healthinsurance.model.Customer;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 
 
