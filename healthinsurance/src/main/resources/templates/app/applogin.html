@@ -1,14 +1,22 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="generallayout.html">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Login</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
 <body>
     <div layout:fragment="content">
         <div class="row">
+            
             <form th:action="@{/app/login}" method="post" class="offset-md-4 col-md-4" style="margin-top: calc(50vh - 200px);">
+                <!-- Display error message -->
+                <div th:if="${param.error}" class="alert alert-danger">
+                    <p>Invalid username or password.</p>
+                </div>
                 <div class="mb-5 text-center">
                     <img alt="Site Logo home" th:src="@{/images/ui-icons_444444_256x240.png}" style="width:90px; height:32px;">
                     <div class="h3">Health Insurance</div>

@@ -11,6 +11,17 @@ Contact: +23279385786
     display: block;
 } */
 
+.ui-front {
+    z-index: 1021 !important;
+}
+
+tr.selected {
+    background-color: var(--bs-primary);
+    border-color: var(--bs-primary);
+    border-collapse: collapse;
+    color: var(--bs-primary-bg-subtle);
+}
+
 .dropdown-menu > .dropright:hover .dropdown-menu {
     display: block;
 }

@@ -3,36 +3,35 @@
     xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
     layout:decorate="layout.html">
     <head>
-        <title>Customers</title>
+        <title>Users</title>
     </head>
     <body>
         <div layout:fragment="content">
-            <div>Customers <a th:href="@{/customers/add}">New Customer</a></div>
+            <div class="h3 mb-5">Users</div>
             <table class="table table-hover">
                 <thead>
                     <tr>
                         <th>ID</th>
                         <th>Full Name</th>
-                        <th>Mobile</th>
-                        <th>Email</th>
                         <th>Username</th>
                         <th>Password</th>
+                        <th>Permissions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr th:each="customer : ${customers}">
-                        <td th:text="${customer.id}"></td>
-                        <td th:text="${customer.getUserAccount().fullname}"></td>
-                        <td th:text="${customer.mobile}"></td>
-                        <td th:text="${customer.email}"></td>
-                        <td th:text="${customer.getUserAccount().username}"></td>
-                        <td th:text="${customer.getUserAccount().password}"></td>
+                    <tr th:each="user : ${users}">
+                        <td th:text="${user.id}"></td>
+                        <td th:text="${user.fullname}"></td>
+                        <td th:text="${user.username}"></td>
+                        <td th:text="${user.password}"></td>
+                        <td th:text="${user.permissions}"></td>
                     </tr>
                 </tbody>
             </table>
             <div id="panel"></div>
-            <script>
+            <script type="text/javascript" th:inline="javascript">
                 let winWidth, winHeight;
+                let permissions = /*[[${permissions}]]*/ [];
                 window.addEventListener("load",function(){
                     winWidth = window.innerWidth - 20;
                     winHeight = window.innerHeight - 20;
@@ -41,20 +40,12 @@
                         select:true,
                         buttons:[
                             'excel','pdf','print'
-                            ,{text:"New Customer",action:function(){
+                            ,{text:"New User",action:function(){
                                 $("#panel").html(`
-                                <form method="post" action="/customers/save">
+                                <form method="post" action="/users/save">
                                     <div class="mb-2">
                                         <label>Fullname</label>
                                         <input type="text" name="fullname" class="form-control"/>
-                                    </div>
-                                    <div class="mb-2">
-                                        <label>Mobile</label>
-                                        <input type="tel" name="mobile" class="form-control"/>
-                                    </div>
-                                    <div class="mb-2">
-                                        <label>Email</label>
-                                        <input type="email" name="email" class="form-control"/>
                                     </div>
                                     <div class="mb-2">
                                         <label>Username</label>
@@ -64,15 +55,25 @@
                                         <label>Password</label>
                                         <input type="text" name="Password" class="form-control"/>
                                     </div>
+                                    <div class="mb-2">
+                                        <div class="row">
+                                            ${permissions.map(x=>`
+                                            <div class="col-auto">
+                                                <input type="checkbox" name="permissions[]" value="${x}" />
+                                                <label>${x}</label>
+                                            </div>
+                                            `).join("")}
+                                        </div>
+                                    </div>
                                     <button class="btn btn-primary">Save</button>
                                 </form>
                                 `).dialog({
-                                    title:"New Customer",
+                                    title:"New User",
                                     width:Math.min(500,winWidth),
-                                    height:winHeight
+                                    height:Math.min(350,winHeight)
                                 })
                             }}
-                            ,{text:"Edit Customer",action:function(ev, api){
+                            ,{text:"Edit User",action:function(ev, api){
                                 let item = api.rows({selected:true}).data();
                                 if(item.length == 0){
                                     alert("You must select a row");
@@ -81,20 +82,12 @@
                                 item = item[0];
 
                                 $("#panel").html(`
-                                <form method="post" action="/customers/save">
+                                <form method="post" action="/users/save">
                                     <input type="hidden" name="id" value="${item.id}"/>
                                     <input type="hidden" name="password" value="${item.password}"/>
                                     <div class="mb-2">
                                         <label>Fullname</label>
                                         <input type="text" name="fullname" value="${item.fullname}" class="form-control"/>
-                                    </div>
-                                    <div class="mb-2">
-                                        <label>Mobile</label>
-                                        <input type="tel" name="mobile" value="${item.mobile}" class="form-control"/>
-                                    </div>
-                                    <div class="mb-2">
-                                        <label>Email</label>
-                                        <input type="email" name="email" value="${item.email}" class="form-control"/>
                                     </div>
                                     <div class="mb-2">
                                         <label>Username</label>
@@ -103,6 +96,16 @@
                                     <div class="mb-2">
                                         <label>Password</label>
                                         <input type="text" placeholder="Type value to change" class="form-control" onChange="setPasswordNameAtribute(this)"/>
+                                    </div>
+                                    <div class="mb-2">
+                                        <div class="row">
+                                            ${permissions.map(x=>`
+                                            <div class="col-auto">
+                                                <input type="checkbox" name="permissions[]" value="${x}" ${item.permissions.indexOf(x) != -1?"checked":""} />
+                                                <label>${x}</label>
+                                            </div>
+                                            `).join("")}
+                                        </div>
                                     </div>
                                     <button class="btn btn-primary">Save</button>
                                 </form>
@@ -116,10 +119,9 @@
                         columns:[
                             {data:"id",visible:false}
                             ,{data:"fullname"}
-                            ,{data:"mobile"}
-                            ,{data:"email"}
                             ,{data:"username"}
                             ,{data:"password",visible:false}
+                            ,{data:"permissions"}
                         ]
                     });
                 });

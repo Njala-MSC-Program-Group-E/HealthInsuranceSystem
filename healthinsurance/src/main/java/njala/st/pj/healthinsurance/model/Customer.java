@@ -1,12 +1,15 @@
 package njala.st.pj.healthinsurance.model;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 
 @Entity
-public class Customer extends User {
+public class Customer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -15,6 +18,22 @@ public class Customer extends User {
     private String mobile;
     private String email;
 
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "user_account_id", unique = true, nullable = false)
+    private User userAccount;
+
+    public long getId() {
+        return id;
+    }
+    public void setId(long id) {
+        this.id = id;
+    }
+    public User getUserAccount() {
+        return userAccount;
+    }
+    public void setUserAccount(User userAccount) {
+        this.userAccount = userAccount;
+    }
     public String getFulladdress() {
         return fulladdress;
     }
@@ -33,5 +52,6 @@ public class Customer extends User {
     public void setEmail(String email) {
         this.email = email;
     }
+    
     
 }

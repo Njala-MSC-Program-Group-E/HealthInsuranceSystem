@@ -1,15 +1,19 @@
 <!DOCTYPE html>
-<html lang="en">
+<html  xmlns:th="http://www.thymeleaf.org"
+xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+layout:decorate="layout.html">
     <head>
         <title>New Customer</title>
     </head>
     <body>
-        <div>New Customer</div>
-        <form th:action="@{/customers/save}" th:object="${customer}" method="post" enctype="application/x-www-form-urlencoded">
-            <div>
-                <label>Full Name</label>
-                <input type="text" name="fullname" th:field="*{fullname}" />
-            </div>
-        </form>
+        <div layout:fragment="content">
+            <div>New Customer</div>
+            <form th:action="@{/customers/save}" th:object="${customer}" method="post" enctype="application/x-www-form-urlencoded">
+                <div>
+                    <label>Full Name</label>
+                    <input type="text" name="fullname" th:field="*{fullname}" />
+                </div>
+            </form>
+        </div>
     </body>
 </html>

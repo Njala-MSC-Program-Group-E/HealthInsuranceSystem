@@ -6,4 +6,6 @@ import njala.st.pj.healthinsurance.model.User;
 
 public interface UserRepository extends JpaRepository<User,Long> { 
     Optional<User> findByUsername(String username);
+
+    boolean existsByUsername(String string);
 }

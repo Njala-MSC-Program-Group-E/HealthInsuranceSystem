@@ -14,9 +14,5 @@ public class LoginController {
     public String home() {
         return "app/home";
     }
-    @GetMapping("/error")
-    public String error() {
-        return "app/error";
-    }
 }
 
