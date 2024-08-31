@@ -12,8 +12,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import njala.st.pj.healthinsurance.component.UserRepository;
 import njala.st.pj.healthinsurance.model.User;
+import njala.st.pj.healthinsurance.repository.UserRepository;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {

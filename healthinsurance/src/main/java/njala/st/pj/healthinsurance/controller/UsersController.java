@@ -17,12 +17,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import njala.st.pj.healthinsurance.StringToPermissionSetConverter;
-import njala.st.pj.healthinsurance.component.CustomerRepository;
-import njala.st.pj.healthinsurance.component.UserRepository;
-import njala.st.pj.healthinsurance.model.Customer;
 import njala.st.pj.healthinsurance.model.Permission;
 import njala.st.pj.healthinsurance.model.User;
+import njala.st.pj.healthinsurance.repository.UserRepository;
 
 @Controller
 @RequestMapping("/users")

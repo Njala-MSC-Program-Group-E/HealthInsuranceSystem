@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html  xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="layout.html">
+    <head>
+        <title>Customers Contributions</title>
+    </head>
+    <body>
+        <div layout:fragment="content">
+            <div class="h3 mb-5">Customers Contributions</div>
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Full Name</th>
+                        <th>Mobile</th>
+                        <th>Email</th>
+                        <th>Amount</th>
+                        <th>Payment Date</th>
+                        <th>Period</th>
+                        <th>Plan</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="contribution : ${contributions}">
+                        <td th:text="${contribution.id}"></td>
+                        <td th:text="${contribution.getCustomer().getUserAccount().fullname}"></td>
+                        <td th:text="${contribution.getCustomer().mobile}"></td>
+                        <td th:text="${contribution.getCustomer().email}"></td>
+                        <td th:text="${contribution.formatedAmount}"></td>
+                        <td th:text="${contribution.paymentdate}"></td>
+                        <td th:text="${contribution.period}">
+                        <td th:text="${contribution.getPlan().name}">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div id="panel"></div>
+            <script th:inline="javascript">
+                let winWidth, winHeight;
+                let plans = /*[[${plans}]]*/ [];
+                window.addEventListener("load",function(){
+                    winWidth = window.innerWidth - 20;
+                    winHeight = window.innerHeight - 20;
+                    $("table").dataTable({
+                        dom:"QBfltips",
+                        select:true,
+                        buttons:[
+                            'excel','pdf','print'
+                        ],
+                        columns:[
+                            {data:"id",visible:false}
+                            ,{data:"fullname"}
+                            ,{data:"mobile"}
+                            ,{data:"email"}
+                            ,{data:"username"}
+                            ,{data:"password",visible:false}
+                            ,{data:"plans"}
+                            ,{data:"planids",visible:false}
+                        ]
+                    });
+                });
+                function setPasswordNameAtribute(val){
+                    if(val.value.length > 0){
+                        val.setAttribute( "name","newpassword")
+                    }else{
+                        val.removeAttribute( "name","newpassword")
+                    }
+                }
+            </script>
+        </div>
+        
+    </body>
+</html>

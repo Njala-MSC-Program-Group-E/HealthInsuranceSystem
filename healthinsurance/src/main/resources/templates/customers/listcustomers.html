@@ -7,7 +7,7 @@
     </head>
     <body>
         <div layout:fragment="content">
-            <div>Customers <a th:href="@{/customers/add}">New Customer</a></div>
+            <div class="h3 mb-5">Customers</div>
             <table class="table table-hover">
                 <thead>
                     <tr>
@@ -17,6 +17,8 @@
                         <th>Email</th>
                         <th>Username</th>
                         <th>Password</th>
+                        <th>Plans</th>
+                        <th>Plan Ids</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -27,12 +29,16 @@
                         <td th:text="${customer.email}"></td>
                         <td th:text="${customer.getUserAccount().username}"></td>
                         <td th:text="${customer.getUserAccount().password}"></td>
+                        <td th:text="${customer.getPlanNames()}">
+                        <td th:text="${customer.getPlanIds()}">
+                        </td>
                     </tr>
                 </tbody>
             </table>
             <div id="panel"></div>
-            <script>
+            <script th:inline="javascript">
                 let winWidth, winHeight;
+                let plans = /*[[${plans}]]*/ [];
                 window.addEventListener("load",function(){
                     winWidth = window.innerWidth - 20;
                     winHeight = window.innerHeight - 20;
@@ -112,6 +118,82 @@
                                     height:Math.min(500,winHeight)
                                 })
                             }}
+                            ,{text:"Enroll Customer into Plan",action:function(ev, api){
+                                let item = api.rows({selected:true}).data();
+                                if(item.length == 0){
+                                    alert("You must select a row");
+                                    return;
+                                }
+                                item = item[0];
+                                if(typeof item.planids == "string"){
+                                    // console.log(item);
+                                    item.planids = JSON.parse(item.planids);
+                                }
+                                // console.log(item);
+
+                                $("#panel").html(`
+                                <form method="post" action="/customers/subscribe">
+                                    <input type="hidden" name="customer" value="${item.id}"/>
+                                    <div class="mb-2">
+                                        <div class="row">
+                                            ${plans.filter(x=>!item.planids.includes(x.id)).map(x=>`
+                                            <div class="col-auto">
+                                                <input type="checkbox" name="plan" value="${x.id}" ${item.planids.find(y=>y == x.id) != undefined?"checked":""} />
+                                                <label>${x.name}</label>
+                                            </div>
+                                            `).join("")}
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-primary">Save</button>
+                                </form>
+                                `).dialog({
+                                    title:"Edit Customer",
+                                    width:Math.min(500,winWidth),
+                                    height:Math.min(500,winHeight)
+                                })
+                            }}
+                            ,{text:"Record Customer Contribution",action:function(ev, api){
+                                let item = api.rows({selected:true}).data();
+                                if(item.length == 0){
+                                    alert("You must select a row");
+                                    return;
+                                }
+                                item = item[0];
+                                if(typeof item.planids == "string"){
+                                    // console.log(item);
+                                    item.planids = JSON.parse(item.planids);
+                                }
+                                // console.log(item);
+
+                                $("#panel").html(`
+                                <form method="post" action="/customers/contribute">
+                                    <input type="hidden" name="customer" value="${item.id}"/>
+                                    <div class="mb-2">
+                                        <select name="plan" require class="form-control">
+                                            <option value="">-- Select Plan ---</option>
+                                            ${plans.filter(x=>item.planids.includes(x.id)).map(x=>`
+                                            <div class="col-auto">
+                                                <option value="${x.id}">${x.name}</option>
+                                            </div>
+                                            `).join("")}
+                                        </select>
+                                    </div>
+                                    <div class="mb-2">
+                                        <label>Amount</label>
+                                        <input name="amount" type="number" step="0.01" class="form-control" />
+                                    </div>
+                                    <div class="mb-2">
+                                        <label>Period</label>
+                                        <input name="period" type="text" class="form-control" placeholder="1/2024" />
+                                    </div>
+                                    <button class="btn btn-primary">Save</button>
+                                </form>
+                                `).dialog({
+                                    title:"Record Customer Contribution",
+                                    width:Math.min(500,winWidth),
+                                    height:Math.min(500,winHeight)
+                                })
+                            }}
                         ],
                         columns:[
                             {data:"id",visible:false}
@@ -120,6 +202,8 @@
                             ,{data:"email"}
                             ,{data:"username"}
                             ,{data:"password",visible:false}
+                            ,{data:"plans"}
+                            ,{data:"planids",visible:false}
                         ]
                     });
                 });

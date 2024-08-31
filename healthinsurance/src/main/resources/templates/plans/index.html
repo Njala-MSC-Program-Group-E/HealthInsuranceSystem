@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html  xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="layout.html">
+    <head>
+        <title>Users</title>
+    </head>
+    <body>
+        <div layout:fragment="content">
+            <div class="h3 mb-5">Premium Plans</div>
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Plan Name</th>
+                        <th>Minimum Contribution</th>
+                        <th>Minimum Contribution Period</th>
+                        <th>Minimum Claim</th>
+                        <th>Claim Rate</th>
+                        <th>Customer Ids</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="plan : ${plans}">
+                        <td th:text="${plan.id}"></td>
+                        <td th:text="${plan.name}"></td>
+                        <td th:text="${plan.minContribution}"></td>
+                        <td th:text="${plan.minContributionDuration}"></td>
+                        <td th:text="${plan.minClaim}"></td>
+                        <td th:text="${plan.claimRate}"></td>
+                        <td th:text="${plan.getCustomerIds()}"></td>
+                    </tr>
+                </tbody>
+            </table>
+            <div id="panel"></div>
+            <script type="text/javascript" th:inline="javascript">
+                let winWidth, winHeight;
+                let customers = /*[[${customers}]]*/ [];
+                window.addEventListener("load",function(){
+                    winWidth = window.innerWidth - 20;
+                    winHeight = window.innerHeight - 20;
+                    $("table").dataTable({
+                        dom:"QBfltips",
+                        select:true,
+                        buttons:[
+                            'excel','pdf','print'
+                            ,{text:"New Plan",action:function(){
+                                $("#panel").html(`
+                                <form method="post" action="/plans/save">
+                                    <div class="mb-2">
+                                        <label>Plan Name</label>
+                                        <input type="text" name="name" class="form-control"/>
+                                    </div>
+                                    <div class="mb-2">
+                                        <label>Minimum Contribution</label>
+                                        <input type="number" name="minContribution" class="form-control" step="0.01"/>
+                                    </div>
+                                    <div class="mb-2">
+                                        <label>Minimum Contribution Duration</label>
+                                        <input type="number" name="minContributionDuration" class="form-control"/>
+                                    </div>
+                                    <div class="mb-2">
+                                        <label>Minimum Claim</label>
+                                        <input type="number" name="minClaim" class="form-control" step="0.01"/>
+                                    </div>
+                                    <div class="mb-2">
+                                        <label>Claim Rate</label>
+                                        <input type="number" name="claimRate" class="form-control"/>
+                                    </div>
+                                    <button class="btn btn-primary">Save</button>
+                                </form>
+                                `).dialog({
+                                    title:"New Plan",
+                                    width:Math.min(500,winWidth),
+                                    height:Math.min(450,winHeight)
+                                })
+                            }}
+                            ,{text:"Edit Plan",action:function(ev, api){
+                                let item = api.rows({selected:true}).data();
+                                if(item.length == 0){
+                                    alert("You must select a row");
+                                    return;
+                                }
+                                item = item[0];
+
+                                $("#panel").html(`
+                                <form method="post" action="/plans/save">
+                                    <input type="hidden" name="id" value="${item.id}"/>
+                                    <div class="mb-2">
+                                        <label>Plan Name</label>
+                                        <input type="text" name="name" class="form-control" value="${item.name}"/>
+                                    </div>
+                                    <div class="mb-2">
+                                        <label>Minimum Contribution</label>
+                                        <input type="number" name="minContribution" class="form-control" step="0.01" value="${item.minContribution}"/>
+                                    </div>
+                                    <div class="mb-2">
+                                        <label>Minimum Contribution Duration</label>
+                                        <input type="number" name="minContributionDuration" class="form-control" value="${item.minContributionDuration}"/>
+                                    </div>
+                                    <div class="mb-2">
+                                        <label>Minimum Claim</label>
+                                        <input type="number" name="minClaim" class="form-control" step="0.01" value="${item.minClaim}"/>
+                                    </div>
+                                    <div class="mb-2">
+                                        <label>Claim Rate</label>
+                                        <input type="number" name="claimRate" class="form-control" value="${item.claimRate}"/>
+                                    </div>
+                                    <button class="btn btn-primary">Save</button>
+                                </form>
+                                `).dialog({
+                                    title:"Edit Plan",
+                                    width:Math.min(500,winWidth),
+                                    height:Math.min(500,winHeight)
+                                })
+                            }}
+                            ,{text:"Enroll Customers into Plan",action:function(ev, api){
+                                let item = api.rows({selected:true}).data();
+                                if(item.length == 0){
+                                    alert("You must select a row");
+                                    return;
+                                }
+                                item = item[0];
+                                if(typeof item.customerids == "string"){
+                                    // console.log(item);
+                                    item.customerids = JSON.parse(item.customerids);
+                                }
+                                console.log(item);
+
+                                $("#panel").html(`
+                                <form method="post" action="/plans/subscribe">
+                                    <input type="hidden" name="plan" value="${item.id}"/>
+                                    <div class="mb-2">
+                                        <div class="row">
+                                            ${customers.filter(x=>!item.customerids.includes(x.id)).map(x=>`
+                                            <div class="col-auto">
+                                                <input type="checkbox" name="customer" value="${x.id}" ${item.customerids.find(y=>y == x.id) != undefined?"checked":""} />
+                                                <label>${x.userAccount.fullname}</label>
+                                            </div>
+                                            `).join("")}
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-primary">Save</button>
+                                </form>
+                                `).dialog({
+                                    title:"Edit Customer",
+                                    width:Math.min(500,winWidth),
+                                    height:Math.min(500,winHeight)
+                                })
+                            }}
+                        ],
+                        columns:[
+                            {data:"id",visible:false}
+                            ,{data:"name"}
+                            ,{data:"minContribution"}
+                            ,{data:"minContributionDuration"}
+                            ,{data:"minClaim"}
+                            ,{data:"claimRate"}
+                            ,{data:"customerids",visible:false}
+                        ]
+                    });
+                });
+                function setPasswordNameAtribute(val){
+                    if(val.value.length > 0){
+                        val.setAttribute( "name","newpassword")
+                    }else{
+                        val.removeAttribute( "name","newpassword")
+                    }
+                }
+            </script>
+        </div>
+        
+    </body>
+</html>

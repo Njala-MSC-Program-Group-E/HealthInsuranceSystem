@@ -1,7 +1,6 @@
 package njala.st.pj.healthinsurance;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import org.springframework.boot.CommandLineRunner;
@@ -9,9 +8,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import njala.st.pj.healthinsurance.component.UserRepository;
 import njala.st.pj.healthinsurance.model.Permission;
 import njala.st.pj.healthinsurance.model.User;
+import njala.st.pj.healthinsurance.repository.UserRepository;
 
 @Configuration
 public class DatabaseInitializer {
