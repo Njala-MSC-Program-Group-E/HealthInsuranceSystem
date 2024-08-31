@@ -11,6 +11,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Transient;
+import njala.st.pj.healthinsurance.Utils;
 
 @Entity
 public class CustomerContribution {
@@ -35,12 +36,7 @@ public class CustomerContribution {
             return formatedAmount;
         }
 
-        if(amount == null || amount.equals(0d)) return "-";
-
-        DecimalFormat dFormat = new DecimalFormat();
-        dFormat.setMaximumFractionDigits(2);
-        dFormat.setMinimumFractionDigits(0);
-        return dFormat.format(amount);
+        return Utils.Format(amount);
     }
     public void setFormatedAmount(String formatedAmount) {
         this.formatedAmount = formatedAmount;

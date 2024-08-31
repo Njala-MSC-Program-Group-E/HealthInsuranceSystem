@@ -2,6 +2,7 @@ package njala.st.pj.healthinsurance.model;
 
 import java.math.BigDecimal;
 import java.sql.Date;
+import java.text.DecimalFormat;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -11,6 +12,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Transient;
+import njala.st.pj.healthinsurance.Utils;
 
 @Entity
 public class CustomerClaim {
@@ -34,19 +36,22 @@ public class CustomerClaim {
     private String formatedPaidAmount;
 
     public String getFormatedClaimAmount() {
-        return formatedClaimAmount;
+        if(formatedClaimAmount != null && formatedClaimAmount.isEmpty()) return formatedClaimAmount;
+        return Utils.FormatBidecimal(claimAmount);
     }
     public void setFormatedClaimAmount(String formatedClaimAmount) {
         this.formatedClaimAmount = formatedClaimAmount;
     }
     public String getFormatedApprovedAmount() {
-        return formatedApprovedAmount;
+        if(formatedApprovedAmount != null && formatedApprovedAmount.isEmpty()) return formatedApprovedAmount;
+        return Utils.FormatBidecimal(approvedAmount);
     }
     public void setFormatedApprovedAmount(String formatedApprovedAmount) {
         this.formatedApprovedAmount = formatedApprovedAmount;
     }
     public String getFormatedPaidAmount() {
-        return formatedPaidAmount;
+        if(formatedPaidAmount != null && formatedPaidAmount.isEmpty()) return formatedPaidAmount;
+        return Utils.FormatBidecimal(paidAmount);
     }
     public void setFormatedPaidAmount(String formatedPaidAmount) {
         this.formatedPaidAmount = formatedPaidAmount;

@@ -16,6 +16,7 @@
                         <th>Mobile</th>
                         <th>Email</th>
                         <th>Amount</th>
+                        <th>Plan</th>
                         <th>Payment Date</th>
                         <th>Period</th>
                         <th>Plan</th>
@@ -28,6 +29,7 @@
                         <td th:text="${contribution.getCustomer().mobile}"></td>
                         <td th:text="${contribution.getCustomer().email}"></td>
                         <td th:text="${contribution.formatedAmount}"></td>
+                        <td th:text="${contribution.plan.getName()}"></td>
                         <td th:text="${contribution.paymentdate}"></td>
                         <td th:text="${contribution.period}">
                         <td th:text="${contribution.getPlan().name}">
@@ -54,6 +56,7 @@
                             ,{data:"mobile"}
                             ,{data:"email"}
                             ,{data:"username"}
+                            ,{data:"username1"}
                             ,{data:"password",visible:false}
                             ,{data:"plans"}
                             ,{data:"planids",visible:false}
