@@ -37,7 +37,7 @@ public class PremiumPlanController {
     }
     
     @PostMapping(value = "/save", consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE})
-    public String saveCustomer(@ModelAttribute PremiumPlans entity, Model model) {
+    public String savePlan(@ModelAttribute PremiumPlans entity, Model model) {
         
         planRepo.saveAndFlush(entity);
         

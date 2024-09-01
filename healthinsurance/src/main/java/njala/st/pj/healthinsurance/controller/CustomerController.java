@@ -34,29 +34,39 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 
-
+/**
+ * This class handle all request for customer.
+ * it includes request for creating customer, updating customer information, paying customer claims, etc.
+ */
 
 @Controller
 @RequestMapping("/customers")
 public class CustomerController {
+    //Password Encoder used
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    //Customer Repository
     @Autowired
     CustomerRepository custRep;
 
+    //User Repository
     @Autowired
     UserRepository userRep;
 
+    //Plans or policy repository
     @Autowired
     PremiumPlansRepository planRep;
 
+    //Customer enrollment into plans repository
     @Autowired
     CustomerPlansRepository cplanRep;
 
+    //Customer contribution repository
     @Autowired
     CustomerContributionRepository cConRep;
 
+    //Customer claims repository
     @Autowired
     CustomerClaimsRepository cClaRep;
 
